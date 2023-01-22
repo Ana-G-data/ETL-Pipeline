@@ -14,9 +14,71 @@ from dotenv import load_dotenv
 load_dotenv()
 
 
+"""devuelve el porcentaje de algo. Llamada sp.porcentaje(df,columna)"""
+def porcentaje(df,columna): 
+    return round(df[columna] /df[columna].sum()*100,2)
+
+"""devuelve el porcentaje de nulos en una columna. sp.porcentaje_nulos(df,columna"""
+def porcentaje_nulos(df,columna):
+    return round((df[columna].isnull().sum() / df.shape[0]) * 100, 2)
+
+"""dos gráficas lineales, una sobre la otra"""
+"""sp.graf_historico1(df1,col1_sup,col2_sup,col3_sup,title_sup,df2,col1_inf,col2_inf,col3_inf,title_inf)"""
+def graf_historico1(df1,col1_sup,col2_sup,col3_sup,title_sup,df2,col1_inf,col2_inf,col3_inf,title_inf):
+    fig, axs = plt.subplots(1, 2, figsize=(20, 10))
+    plt.subplot(2, 1, 1)
+    for group in df1[col1_sup].unique():
+        subset = df1[df1[col1_sup] == group]
+        plt.plot(subset[col2_sup], subset[col3_sup], label=group)
+    plt.xlabel(col2_sup)
+    plt.ylabel(col3_sup)
+    plt.legend()
+    plt.title(title_sup)
+    plt.gca().spines['top'].set_visible(False)
+    plt.gca().spines['right'].set_visible(False)
+    # Crear el segundo gráfico
+    plt.subplot(2, 1, 2)
+    for group in df2[col1_inf].unique():
+        subset = df2[df2[col1_inf] == group]
+        plt.plot(subset[col2_inf], subset[col3_inf], label=group)
+    plt.xlabel(col2_inf)
+    plt.ylabel(col3_inf)
+    plt.legend()
+    plt.title(title_inf)
+    plt.gca().spines['top'].set_visible(False)
+    plt.gca().spines['right'].set_visible(False)
+    # Mostrar los gráficos
+    plt.show()
+
+
+"""dos gráficas de barras, una sobre la otra, mostrando los porcentajes encima de cada barra"""
+"""sp.graf_barras1(sup_x,sup_y,df1,sup_xlabel,sup_ylabel,sup_title,sup_col,inf_x,inf_y,df2,inf_xlabel,inf_ylabel,inf_title,inf_col)"""
+def graf_barras1(sup_x,sup_y,df1,sup_xlabel,sup_ylabel,sup_title,sup_col,inf_x,inf_y,df2,inf_xlabel,inf_ylabel,inf_title,inf_col):
+    fig, axs = plt.subplots(2, 1, figsize=(20, 10))
+
+    ax = sns.barplot(x=sup_x, y=sup_y, data=df1, ax=axs[0])
+    ax.spines['right'].set_visible(False)
+    ax.spines['top'].set_visible(False)
+    plt.xlabel(sup_xlabel)
+    plt.ylabel(sup_ylabel)
+    plt.title(sup_title)
+    for i, v in enumerate(df1[sup_col]):
+        ax.text(i-.25, v+0.25, str(round(v/df1[sup_col].sum()*100, 2)) + '%', color='black', fontweight='bold')
+
+    ax = sns.barplot(x=inf_x, y=inf_y, data=df2, ax=axs[1])
+    ax.spines['right'].set_visible(False)
+    ax.spines['top'].set_visible(False)
+    plt.xlabel(inf_xlabel)
+    plt.ylabel(inf_ylabel)
+    plt.title(inf_title)
+
+    for i, v in enumerate(df2[inf_col]):
+        ax.text(i-.25, v+0.25, str(round(v/df2[inf_col].sum()*100, 2)) + '%', color='black', fontweight='bold')
+
+
+"""Función para rellenar valores nulos con información de otra columna"""
+"""Para llamar la columna sp.copiar_valores(df,'columna_con_nulos','columna_valores')"""
 def copiar_valores(df,col_nulos,col_valores):
-    """Función para rellenar valores nulos con información de otra columna"""
-    """Para llamar la columna sp.copiar_valores(df,'columna_con_nulos','columna_valores')"""
     # Selecciona los valores nulos de la columna A
     nulos = df[col_nulos].isnull()
     # Copia los valores de la columna A a la columna B solo para los valores nulos de B
@@ -104,12 +166,6 @@ def graf_temporal_group_by(df, columnx,columny):
 
 
 
-
-
-
-
-
-
         
 def graf_lineal(df,colx,coly,labelx,labely,xnames,title,marcador_vertical):
     """Grafica líneal con marcador verical en punto a elegir"""
@@ -140,14 +196,4 @@ def graf_lineal(df,colx,coly,labelx,labely,xnames,title,marcador_vertical):
     plt.axvline(x=marcador_vertical, color='red', linewidth=2)
 
     plt.show()
-
-
-def porcentaje(df,columna):
-    return round(df[columna] /df[columna].sum()*100,2)
-
-def porcentaje_nulos(df,columna):
-    return round((df[columna].isnull().sum() / df.shape[0]) * 100, 2)
-    
-
-
 
