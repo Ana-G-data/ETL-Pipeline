@@ -76,6 +76,20 @@ def graf_barras1(sup_x,sup_y,df1,sup_xlabel,sup_ylabel,sup_title,sup_col,inf_x,i
         ax.text(i-.25, v+0.25, str(round(v/df2[inf_col].sum()*100, 2)) + '%', color='black', fontweight='bold')
 
 
+"""gráfico de barras agrupado"""
+"""sp.graf_barras2(x_,y_,hue_,df,xlabel,ylabel,title)"""
+def graf_barras2(x_,y_,hue_,df,xlabel,ylabel,title):
+    plt.figure(figsize=(20, 10))
+    ax = sns.barplot(x=x_, y=y_, hue=hue_, data=df)
+    ax.spines['right'].set_visible(False)
+    ax.spines['top'].set_visible(False)
+    # Añadir etiquetas y título al gráfico
+    plt.xlabel(xlabel)
+    plt.ylabel(ylabel)
+    plt.title(title)
+
+
+
 """Función para rellenar valores nulos con información de otra columna"""
 """Para llamar la columna sp.copiar_valores(df,'columna_con_nulos','columna_valores')"""
 def copiar_valores(df,col_nulos,col_valores):
