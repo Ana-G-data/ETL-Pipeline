@@ -5,9 +5,7 @@ pd.options.display.max_columns = None
 from datetime import datetime, date
 from datetime import datetime, time, timedelta
 import warnings
-import seaborn as sns
 import matplotlib.pyplot as plt
-from fuzzywuzzy import fuzz
 import requests
 import os 
 from dotenv import load_dotenv
@@ -89,17 +87,6 @@ def graf_barras2(x_,y_,hue_,df,xlabel,ylabel,title):
     plt.title(title)
 
 
-
-"""Función para rellenar valores nulos con información de otra columna"""
-"""Para llamar la columna sp.copiar_valores(df,'columna_con_nulos','columna_valores')"""
-def copiar_valores(df,col_nulos,col_valores):
-    # Selecciona los valores nulos de la columna A
-    nulos = df[col_nulos].isnull()
-    # Copia los valores de la columna A a la columna B solo para los valores nulos de B
-    df.loc[nulos, col_valores] = df.loc[nulos, col_nulos]
-    return df
-
-
 def dividir_serie(df): 
     """Función para dividir los nombres de los programas"""
     df_cursos = pd.DataFrame(columns=['Destino', 'Tipo', 'Duración', 'Comienzo', 'Final', 'Nombre_completo'])   
@@ -118,30 +105,6 @@ def dividir_serie(df):
     
     return df_cursos
 
-
-
-def edad(df, birth_date_col, age_col): 
-    """Función para calcular la edad teniendo la fecha de nacimiento. Para llamarla: sp.edad(dataframe,'columna_fecha', 'columna_edad')"""
-    for i, elemento in df[birth_date_col].iteritems():
-        # Comprobar si el elemento es nulo
-        if not pd.isnull(elemento):
-            Birth_Date = datetime.strptime(elemento, "%d/%m/%Y").date()
-            age = date.today() - Birth_Date
-            age_years = int(age.days / 365.2425)
-            df.loc[i, age_col] = age_years
-    return df
-
-
-def year_nacimiento (df, age_col, birth_date_col ):
-    """Función para calcular el año de nacimiento teniendo la edad. Para llamarla: sp.edad(dataframe,'columna_edad', 'columna_fecha')"""
-    for i, elemento in df[age_col].iteritems():
-        # Comprobar si el elemento es nulo
-        if not pd.isnull(elemento):
-            # Calcular el año de nacimiento restando la edad actual a la fecha actual
-            birthyear = int(date.today().year - elemento)
-            # Asignar el año de nacimiento a la columna "Birthyear"
-            df.loc[i, birth_date_col] = birthyear
-    return df
 
 
 def graf_barras(mediana, graf_dcha_x, graf_dcha_y, graf_dcha_data,graf_dcha_labelx, graf_dcha_labely, graf_dcha_title):
@@ -164,50 +127,17 @@ def graf_barras(mediana, graf_dcha_x, graf_dcha_y, graf_dcha_data,graf_dcha_labe
 
     
 
+def graf_quesitos(columna)
 
+import matplotlib.pyplot as plt
 
-def graf_temporal_group_by(df, columnx,columny):
-    fig, ax = plt.subplots(figsize=(10,5))
-    for x in df[columnx].unique():
-        x_df = df[df[columnx] == x]
-        plt.plot(x_df[columny], x_df[columny], label=ax)
-    ax.set_xlabel('Year')
-    ax.set_ylabel('Total')
-    ax.set_title('Histórico de voluntarios')
-    plt.legend()
-    plt.show()
-
-
+manzanas = [20,10,25,30]
+nombres = ["Ana","Juan","Diana","Catalina"]
+plt.pie(manzanas, labels=nombres, autopct="%0.1f %%")
+plt.axis("equal")
+plt.show()
 
 
         
-def graf_lineal(df,colx,coly,labelx,labely,xnames,title,marcador_vertical):
-    """Grafica líneal con marcador verical en punto a elegir"""
-    """Con los valores que queramos en x"""
-    """Para llamarla sp.graf_lineal((df,'colx','coly','labelx','labely','xnames','title',marcador_vertical)"""
-    plt.figure(figsize=(15, 6))
 
-    ax = plt.axes() 
-    ax.set_facecolor("white") 
-
-    ax.spines['bottom'].set_color('black') 
-    ax.spines['top'].set_color('white')
-    ax.spines['right'].set_color('white') 
-    ax.spines['left'].set_color('black') 
-
-    plt.plot(df[colx], 
-            df[coly], 
-            color = "green", 
-            linewidth = 2, 
-            marker = "o") 
-
-    plt.xlabel(labelx,fontsize=15) 
-    plt.ylabel(labely,fontsize=15) 
-    plt.title(title,fontsize=20)
-    plt.xticks(df[xnames],rotation=45)
-
-    # Add the vertical red line at the year 2020
-    plt.axvline(x=marcador_vertical, color='red', linewidth=2)
-
-    plt.show()
 
