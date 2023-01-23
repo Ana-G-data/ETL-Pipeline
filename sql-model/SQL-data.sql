@@ -1,1 +1,0 @@
-SELECT * FROM `etl-1`.arrivals;
